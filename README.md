@@ -1,2 +1,2 @@
 # IntSys-Education
-Intelligent Systems Education Assignments.
+Cornell Data Science Intelligent Systems Education Assignments.
