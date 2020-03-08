@@ -18,3 +18,5 @@ transpose = torch.tensor([[1.0],[2.8],[3.8]])
 print(torch.t(transpose))
 print(torch.mm(p,torch.t(t3)))
 #torch.t(t3)
+
+print("alexa play sad boi hours")
