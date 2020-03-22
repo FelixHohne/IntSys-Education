@@ -1,4 +1,5 @@
 import linear_regression as lr
+import data_loader as dl
 import torch
 
 t1 = torch.tensor([[1,2,3,4,5,6]])
@@ -20,3 +21,7 @@ print(torch.mm(p,torch.t(t3)))
 #torch.t(t3)
 
 print("alexa play sad boi hours")
+'''
+print(dl.SimpleDataset('data/DS1.csv'))
+print(dl.get_data_loaders('data/DS1.csv'))
+'''
