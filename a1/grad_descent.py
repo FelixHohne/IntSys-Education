@@ -380,7 +380,6 @@ def grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
     
-    """ Adding a column of zeroes to X """ 
 
     theta = np.zeros(x.shape[1])
 
