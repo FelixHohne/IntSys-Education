@@ -378,22 +378,24 @@ def grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :return: The ideal parameters and the list of paramters through time
     :rtype: tuple[np.ndarray, np.ndarray]
     """
-    # TODO 1: Write the traditional gradient descent algorithm without matrix
-    # operations or numpy vectorization
-    #return np.zeros((1,))
-    if x.ndim == 1:
-        theta = np.random.random((1,1), ndim=2)
-    else:
-        theta = np.random.random((1,x.shape[1]))
+    
+    x_row, x_col = x.shape
+    zeroes_column = np.zeros((x_row, 1))
+    internal_x = np.copy(x)
+    internal_x = np.concatenate((zeroes_column, internal_x), axis=1)
 
-    thetas = [theta]
-    import sys; import time
+    theta = np.zeros(x_col + 1)
 
-    for i in range(steps):
-        theta = theta - 0.001*(1/x.shape[0])*grad_loss_f(h, grad_h, theta, x, y)
-        thetas.append(theta)
+    alpha = 0.01
+    m = (1/x.shape[0])
+    theta_hist = theta.tolist()
 
-    return theta, np.array(thetas)
+    for i in range(steps):     
+        theta = theta - alpha * (1/m) * grad_loss_f(h, grad_h, theta, x, y)
+        theta_hist = theta_hist + theta.tolist()
+    
+    theta_hist = np.asarray(theta_hist)
+    return (theta, theta_hist)
 
 
 def stochastic_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
@@ -436,7 +438,8 @@ def stochastic_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
-    # TODO 2
+    
+
     return np.zeros((1,))
 
 
@@ -664,4 +667,4 @@ def test_gd(grad_des_f):
 
 
 if __name__ == "__main__":
-    pass
+    save_linear_gif()
