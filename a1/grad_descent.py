@@ -382,8 +382,7 @@ def grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     
     """ Adding a column of zeroes to X """ 
 
-    x_col = x.shape[1]
-    theta = np.zeros(x_col + 1)
+    theta = np.zeros(x.shape[1])
 
     alpha = 0.01
     m = (1/x.shape[0])
