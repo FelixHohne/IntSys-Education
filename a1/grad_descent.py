@@ -331,6 +331,7 @@ def grad_l2_loss(h, grad_h, theta, x, y):
     :return: The l2 loss value
     :rtype: float
     """
+        
     return (np.sum((h(theta, x) - y) * grad_h(theta, x)))
 
 
@@ -379,11 +380,9 @@ def grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
     
-    x_row, x_col = x.shape
-    zeroes_column = np.zeros((x_row, 1))
-    internal_x = np.copy(x)
-    internal_x = np.concatenate((zeroes_column, internal_x), axis=1)
+    """ Adding a column of zeroes to X """ 
 
+    x_col = x.shape[1]
     theta = np.zeros(x_col + 1)
 
     alpha = 0.01
@@ -438,6 +437,24 @@ def stochastic_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
+
+    x_row, x_col = x.shape
+    zeroes_column = np.zeros((x_row, 1))
+    internal_x = np.copy(x)
+    internal_x = np.concatenate((zeroes_column, internal_x), axis=1)
+
+    theta = np.zeros(x_col + 1)
+
+    alpha = 0.01
+    m = (1/x.shape[0])
+    theta_hist = theta.tolist()
+
+    for i in range(steps):     
+        theta = theta - alpha * (1/m) * grad_loss_f(h, grad_h, theta, internal_x, y)
+        theta_hist = theta_hist + theta.tolist()
+    
+    theta_hist = np.asarray(theta_hist)
+    return (theta, theta_hist)
     
 
     return np.zeros((1,))
