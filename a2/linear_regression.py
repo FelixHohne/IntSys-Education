@@ -16,6 +16,7 @@ class LinearRegressionModel(nn.Module):
         ## TODO 1: Set up network
         super(LinearRegressionModel, self).__init__()
         self.num_param = num_param
+        self.thetas = torch.nn.Parameter(torch.randn((1, self.num_param)))
 
     def forward(self, x):
         """forward generates the predictions for the input
@@ -36,8 +37,7 @@ class LinearRegressionModel(nn.Module):
         :rtype: torch.Tensor
         """
         ## TODO 2: Implement the linear regression on sample x
-        thetas = torch.randn((1, self.num_param))
-        return torch.mm(thetas,torch.t(x))
+        return torch.mm(self.thetas,torch.t(x).float())
 
 
 def data_transform(sample):
@@ -168,6 +168,41 @@ if __name__ == "__main__":
     ## You don't need to do loss.backward() or optimizer.step() here since you are no
     ## longer training.
 
-    model = LinearRegressionModel(1)
-    optimizer = optim.model(parameters(), lr=0.01)
-    predictions = model(X)
+    path_to_csv = 'data/DS1.csv'
+    transform_fn = None  # Can also pass in None here
+    train_val_test = [0.6, 0.2, 0.2]
+    batch_size = 32
+    num_param = 2
+    lr = 0.01
+    TOTAL_TIME_STEPS = 100
+
+    train_loader, val_loader, test_loader =\
+       get_data_loaders(path_to_csv,
+                        transform_fn=transform_fn,
+                        train_val_test=train_val_test,
+                        batch_size=batch_size)
+
+    model = LinearRegressionModel(num_param)
+    optimizer = optim.SGD(model.parameters(), lr=lr)
+
+    model.train()
+    for t in range(TOTAL_TIME_STEPS):
+       for batch_index, (input_t, y) in enumerate(train_loader):
+            optimizer.zero_grad()
+    
+            preds = model(input_t)
+    
+            loss = mse_loss(preds, y.view(1,len(y)))  # You might have to change the shape of things here.
+            print(loss)
+            loss.backward()
+            optimizer.step()
+    
+    model.eval()
+    for batch_index, (input_t, y) in enumerate(val_loader):
+    
+        preds = model(input_t)
+    
+        loss = mse_loss(preds, y.view(1,len(y)))
+        print(loss)
+    
+
