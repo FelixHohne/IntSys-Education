@@ -45,9 +45,7 @@ def data_transform(sample):
   ## TODO: Define a transform on a given (x, y) sample. This can be used, for example
   ## for changing the feature representation of your data so that Linear regression works
   ## better.
-  x, y = sample
-  
-  return sample ## You might want to change this
+  return np.append([1],sample)
 
 
 def mse_loss(output, target):
@@ -169,10 +167,10 @@ if __name__ == "__main__":
     ## longer training.
 
     path_to_csv = 'data/DS1.csv'
-    transform_fn = None  # Can also pass in None here
+    transform_fn = data_transform  # Can also pass in None here
     train_val_test = [0.6, 0.2, 0.2]
     batch_size = 32
-    num_param = 2
+    num_param = 3
     lr = 0.01
     loss_fn = mae_loss
     TOTAL_TIME_STEPS = 100
@@ -191,7 +189,7 @@ if __name__ == "__main__":
        for batch_index, (input_t, y) in enumerate(train_loader):
 
             optimizer.zero_grad()
-            print(model.thetas)
+            #print(model.thetas)
             preds = model(input_t)
             #print(preds)
             #print(y)
@@ -206,6 +204,7 @@ if __name__ == "__main__":
         preds = model(input_t)
     
         loss = loss_fn(preds, y.view(1,len(y)))
+        #print(loss)
 
     
 
