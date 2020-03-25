@@ -16,7 +16,7 @@ class LinearRegressionModel(nn.Module):
         ## TODO 1: Set up network
         super(LinearRegressionModel, self).__init__()
         self.num_param = num_param
-        self.thetas = torch.nn.Parameter(torch.randn((1, self.num_param)))
+        self.thetas = torch.nn.Parameter(torch.randn(1, self.num_param))
 
     def forward(self, x):
         """forward generates the predictions for the input
@@ -80,7 +80,7 @@ def mse_loss(output, target):
     assert loss.shape == output.shape
     mse = torch.sum(loss)
     size = target.shape
-    n = list(size)[0]
+    n = size[1]
     return torch.div(mse,n)
 
 
@@ -114,7 +114,7 @@ def mae_loss(output, target):
     assert loss.shape == output.shape
     mse = torch.sum(loss)
     size = target.shape
-    n = list(size)[0]
+    n = size[1]
     return torch.div(mse,n)
 
 
@@ -174,6 +174,7 @@ if __name__ == "__main__":
     batch_size = 32
     num_param = 2
     lr = 0.01
+    loss_fn = mae_loss
     TOTAL_TIME_STEPS = 100
 
     train_loader, val_loader, test_loader =\
@@ -188,13 +189,15 @@ if __name__ == "__main__":
     model.train()
     for t in range(TOTAL_TIME_STEPS):
        for batch_index, (input_t, y) in enumerate(train_loader):
+
             optimizer.zero_grad()
-    
+            print(model.thetas)
             preds = model(input_t)
-    
-            loss = mse_loss(preds, y.view(1,len(y)))  # You might have to change the shape of things here.
-            print(loss)
+            #print(preds)
+            #print(y)
+            loss = loss_fn(preds, y.view(1,len(y)))  # You might have to change the shape of things here.
             loss.backward()
+            #print(loss)
             optimizer.step()
     
     model.eval()
@@ -202,7 +205,7 @@ if __name__ == "__main__":
     
         preds = model(input_t)
     
-        loss = mse_loss(preds, y.view(1,len(y)))
-        print(loss)
+        loss = loss_fn(preds, y.view(1,len(y)))
+
     
 

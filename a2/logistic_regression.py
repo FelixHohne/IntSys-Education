@@ -17,7 +17,8 @@ class LogisticRegressionModel(nn.Module):
     def __init__(self, num_param):
         ## TODO 1: Set up network
         super(LogisticRegressionModel, self).__init__()
-        pass
+        self.num_param = num_param
+        self.thetas = torch.nn.Parameter(torch.randn(1, self.num_param))
 
     def forward(self, x):
         """forward generates the predictions for the input
