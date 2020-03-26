@@ -18,7 +18,7 @@ class LogisticRegressionModel(nn.Module):
         ## TODO 1: Set up network
         super(LogisticRegressionModel, self).__init__()
         self.num_param = num_param
-        self.thetas = torch.nn.Parameter(torch.randn(1, self.num_param))
+        self.linear = nn.Linear(self.num_param, 1)
 
     def forward(self, x):
         """forward generates the predictions for the input
@@ -40,7 +40,7 @@ class LogisticRegressionModel(nn.Module):
         """
 
         ## TODO 2: Implement the logistic regression on sample x
-        pass
+        return F.sigmoid(self.linear(x.float()))
 
 
 class MultinomialRegressionModel(nn.Module):
@@ -106,7 +106,8 @@ def logistic_loss(output, target):
     """
     # TODO 2: Implement the logistic loss function from the slides using
     # pytorch operations
-    return 0
+    loss = -target*(torch.log(output))-(1-target)*(torch.log(output))
+    return loss.mean()
 
 
 def cross_entropy_loss(output, target):
@@ -129,4 +130,39 @@ def cross_entropy_loss(output, target):
 if __name__ == "__main__":
     # TODO: Run a sample here
     # Look at linear_regression.py for a hint on how you should do this!!
-    pass
+    path_to_csv = 'data/DS3.csv'
+    train_val_test = [0.6, 0.2, 0.2]
+    batch_size = 32
+    num_param = 2
+    lr = 0.0001
+    loss_fn = logistic_loss
+    TOTAL_TIME_STEPS = 1000
+
+    train_loader, val_loader, test_loader =\
+       get_data_loaders(path_to_csv,
+                        train_val_test=train_val_test,
+                        batch_size=batch_size)
+
+    model = LogisticRegressionModel(num_param)
+    optimizer = optim.SGD(model.parameters(), lr=lr)
+
+    model.train()
+    for t in range(TOTAL_TIME_STEPS):
+       for batch_index, (input_t, y) in enumerate(train_loader):
+
+            optimizer.zero_grad()
+            preds = model(input_t)
+            #print(preds)
+            #print(y)
+            loss = loss_fn(preds, y.view(1,len(y)))  # You might have to change the shape of things here.
+            loss.backward()
+            #print(loss)
+            optimizer.step()
+    
+    model.eval()
+    for batch_index, (input_t, y) in enumerate(val_loader):
+    
+        preds = model(input_t)
+    
+        loss = loss_fn(preds, y.view(1,len(y)))
+        #print(loss)
