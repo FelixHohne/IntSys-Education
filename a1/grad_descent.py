@@ -435,7 +435,7 @@ def stochastic_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
-  x_row, x_col = x.shape 
+    x_row, x_col = x.shape 
     theta = np.random.random(x_col)
     alpha = 0.01
     theta_hist = theta.tolist()
@@ -494,7 +494,7 @@ def minibatch_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
-   x_row, x_col = x.shape 
+    x_row, x_col = x.shape 
     theta = np.random.random(x_col)
     alpha = 0.01
     theta_hist = theta.tolist()
@@ -704,7 +704,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        grad_descent,
+        matrix_minibatch_gd,
         x_support,
         y_support
     )
@@ -715,7 +715,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        grad_descent,
+        matrix_minibatch_gd,
         x_support,
         y_support
     )
