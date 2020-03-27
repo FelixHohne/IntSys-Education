@@ -704,7 +704,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        matrix_minibatch_gd,
+        grad_descent,
         x_support,
         y_support
     )
@@ -715,7 +715,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        matrix_minibatch_gd,
+        grad_descent,
         x_support,
         y_support
     )
