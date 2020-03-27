@@ -380,19 +380,19 @@ def grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
     
-
-    theta = np.zeros(x.shape[1])
+    x_row, x_col = x.shape
+    theta =np.random.rand(x_col)
 
     alpha = 0.01
-    m = (1/x.shape[0])
     theta_hist = theta.tolist()
 
     for i in range(steps):     
-        theta = theta - alpha * (1/m) * grad_loss_f(h, grad_h, theta, x, y)
+        theta = theta - alpha * grad_loss_f(h, grad_h, theta, x, y) * loss_f(h, grad_h, theta, x, y)
         theta_hist = theta_hist + theta.tolist()
     
     theta_hist = np.asarray(theta_hist)
     return (theta, theta_hist)
+
 
 
 def stochastic_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
@@ -435,27 +435,23 @@ def stochastic_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
-
-    x_row, x_col = x.shape
-    zeroes_column = np.zeros((x_row, 1))
-    internal_x = np.copy(x)
-    internal_x = np.concatenate((zeroes_column, internal_x), axis=1)
-
-    theta = np.zeros(x_col + 1)
-
+  x_row, x_col = x.shape 
+    theta = np.random.random(x_col)
     alpha = 0.01
-    m = (1/x.shape[0])
     theta_hist = theta.tolist()
 
-    for i in range(steps):     
-        theta = theta - alpha * (1/m) * grad_loss_f(h, grad_h, theta, internal_x, y)
+    np.random.shuffle(x)
+
+    for i in range(0, steps): 
+        sto_x = x[i]
+        sto_y = y[i]
+        theta = theta - alpha * grad_loss_f(h, grad_h, theta, sto_x, sto_y) * loss_f(h, grad_h, theta, sto_x, sto_y)
         theta_hist = theta_hist + theta.tolist()
-    
+
     theta_hist = np.asarray(theta_hist)
     return (theta, theta_hist)
-    
 
-    return np.zeros((1,))
+    
 
 
 def minibatch_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
@@ -498,9 +494,23 @@ def minibatch_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
-    # TODO 3: Write the stochastic mini-batch gradient descent algorithm without 
-    # matrix operations or numpy vectorization
-    return np.zeros((1,))
+   x_row, x_col = x.shape 
+    theta = np.random.random(x_col)
+    alpha = 0.01
+    theta_hist = theta.tolist()
+
+    np.random.shuffle(x)
+
+    batch_size = 32
+
+    for i in range(0, steps): 
+        mini_x = x[0 + batch_size * i: batch_size + batch_size * i]
+        mini_y = y[0 + batch_size * i: batch_size + batch_size * i]
+        theta = theta - alpha * grad_loss_f(h, grad_h, theta, mini_x, mini_y) * loss_f(h, grad_h, theta, mini_x, mini_y)
+        theta_hist = theta_hist + theta.tolist()
+
+    theta_hist = np.asarray(theta_hist)
+    return (theta, theta_hist)
 
 
 def matrix_gd(h, grad_h, loss_f, grad_loss_f, x, y, steps, batch_size):
@@ -545,9 +555,18 @@ def matrix_gd(h, grad_h, loss_f, grad_loss_f, x, y, steps, batch_size):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
-    # TODO 4: Write the traditional gradient descent algorithm WITH matrix
-    # operations or numpy vectorization
-    return np.zeros((1,))
+    x_row, x_col = x.shape 
+    theta = np.random.random(x_col)
+    alpha = 0.01
+    theta_hist = theta.tolist()
+
+    for i in range(0, steps): 
+        theta = theta - alpha * grad_loss_f(h, grad_h, theta, x, y) * loss_f(h, grad_h, theta, x, y)
+        theta_hist = theta_hist + theta.tolist()
+    
+    theta_hist = np.asarray(theta_hist)
+    return (theta, theta_hist)
+    
 
 
 def matrix_sgd(h, grad_h, loss_f, grad_loss_f, x, y, steps):
@@ -589,10 +608,22 @@ def matrix_sgd(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :return: The ideal parameters and the list of paramters through time
     :rtype: tuple[np.ndarray, np.ndarray]
     """
+    x_row, x_col = x.shape 
+    theta = np.random.random(x_col)
+    alpha = 0.01
+    theta_hist = theta.tolist()
 
-    # TODO 5: Write the stochastic gradient descent algorithm WITH matrix
-    # operations or numpy vectorization
-    return np.zeros((1,))
+    np.random.shuffle(x)
+
+    for i in range(0, steps): 
+        sto_x = x[i]
+        sto_y = y[i]
+        theta = theta - alpha * grad_loss_f(h, grad_h, theta, sto_x, sto_y) * loss_f(h, grad_h, theta, sto_x, sto_y)
+        theta_hist = theta_hist + theta.tolist()
+
+    theta_hist = np.asarray(theta_hist)
+    return (theta, theta_hist)
+
 
 
 def matrix_minibatch_gd(h, grad_h, loss_f, grad_loss_f, x, y, steps, batch_size):
@@ -637,9 +668,23 @@ def matrix_minibatch_gd(h, grad_h, loss_f, grad_loss_f, x, y, steps, batch_size)
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
-    # TODO 6: Write the stochastic mini-batch gradient descent algorithm WITH 
-    # matrix operations or numpy vectorization
-    return np.zeros((1,))
+    x_row, x_col = x.shape 
+    theta = np.random.random(x_col)
+    alpha = 0.01
+    theta_hist = theta.tolist()
+
+    np.random.shuffle(x)
+
+    batch_size = 32
+
+    for i in range(0, steps): 
+        mini_x = x[0 + batch_size * i: batch_size + batch_size * i]
+        mini_y = y[0 + batch_size * i: batch_size + batch_size * i]
+        theta = theta - alpha * grad_loss_f(h, grad_h, theta, mini_x, mini_y) * loss_f(h, grad_h, theta, mini_x, mini_y)
+        theta_hist = theta_hist + theta.tolist()
+
+    theta_hist = np.asarray(theta_hist)
+    return (theta, theta_hist)
 
 
 # ============================================================================

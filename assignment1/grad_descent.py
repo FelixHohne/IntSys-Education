@@ -386,7 +386,6 @@ def grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     else:
         theta = np.random.random((1,x.shape[1]))
 
-    thetas = [theta]
     import sys; import time
 
     for i in range(steps):
