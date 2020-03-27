@@ -1,5 +1,6 @@
 import csv
 import numpy as np
+import pandas as pd
 from torch.utils.data import Dataset, DataLoader, SubsetRandomSampler
 import torch
 
@@ -19,8 +20,8 @@ class SimpleDataset(Dataset):
         # with open('path/to/.csv', 'r') as f:
         #   lines = ...
         ## Look up how to read .csv files using Python. This is common for datasets in projects.
-
-        self.data = np.genfromtxt(path_to_csv, delimiter=',')
+        inp_df = pd.read_csv(path_to_csv)
+        self.data = torch.Tensor(inp_df.values)
         self.transform = transform
 
     def __len__(self):
@@ -29,7 +30,7 @@ class SimpleDataset(Dataset):
         [extended_summary]
         """
         ## TODO: Returns the length of the dataset.
-        return len(self.data)
+        return self.data.shape[0]
 
     def __getitem__(self, index):
         """__getitem__ [summary]
