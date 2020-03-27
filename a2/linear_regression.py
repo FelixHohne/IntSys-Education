@@ -79,6 +79,7 @@ def mse_loss(output, target):
     mse = torch.sum(loss)
     size = target.shape
     n = size[1]
+    #change to mean later -E
     return torch.div(mse,n)
 
 
@@ -113,6 +114,7 @@ def mae_loss(output, target):
     mse = torch.sum(loss)
     size = target.shape
     n = size[1]
+    #change to mean later -E
     return torch.div(mse,n)
 
 
@@ -166,7 +168,7 @@ if __name__ == "__main__":
     ## You don't need to do loss.backward() or optimizer.step() here since you are no
     ## longer training.
 
-    path_to_csv = 'data/DS1.csv'
+    path_to_csv = 'C:\\Users\\evely\\IntSys-Education\\a2\\data\\DS1.csv'
     transform_fn = data_transform  # Can also pass in None here
     train_val_test = [0.6, 0.2, 0.2]
     batch_size = 32
@@ -205,7 +207,6 @@ if __name__ == "__main__":
         preds = model(input_t)
     
         loss = loss_fn(preds, y.view(1,len(y)))
-        #print(loss)
-
+        print(loss)
     
 

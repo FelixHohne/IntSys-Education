@@ -21,7 +21,7 @@ class SimpleDataset(Dataset):
         #   lines = ...
         ## Look up how to read .csv files using Python. This is common for datasets in projects.
         inp_df = pd.read_csv(path_to_csv)
-        self.data = torch.Tensor(inp_df.values)
+        self.data = inp_df.to_numpy()
         self.transform = transform
         
 
@@ -54,14 +54,15 @@ class SimpleDataset(Dataset):
         sample = self.data[index,:]
         if self.transform:
             sample = self.transform(sample)
-        x = torch.from_numpy(np.array(sample[:-1]))
+        # make tensor below -E
+        x = torch.from_numpy(np.array(sample[:-1])) 
         y = torch.from_numpy(np.array(sample[-1]))
         return x,y
 
 
 def get_data_loaders(path_to_csv, 
                      transform_fn=None,
-                     train_val_test=[0.8, 0.2, 0.2], 
+                     train_val_test=[0.8, 0.1, 0.1], 
                      batch_size=32):
     """get_data_loaders [summary]
     
@@ -82,6 +83,7 @@ def get_data_loaders(path_to_csv,
     # Then, we create a list of indices for all samples in the dataset.
     dataset_size = len(dataset)
     indices = list(range(dataset_size))
+    #random.shuffle -E 
 
     ## TODO: Rewrite this section so that the indices for each dataset split
     ## are formed.

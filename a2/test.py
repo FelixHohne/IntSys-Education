@@ -35,9 +35,9 @@ ds1ForActualTesting = dl.SimpleDataset('C:\\Users\\evely\\IntSys-Education\\a2\\
 local datapath(or maybe I'm doing something wrong ¯\_(ツ)_/¯).'''
 dl.get_data_loaders('C:\\Users\\evely\\IntSys-Education\\a2\\data\\DS1.csv')
 
-ds1ForVis = pd.read_csv('C:\\Users\\evely\\IntSys-Education\\a2\\data\\DS1.csv')
+ds1ForVis = pd.read_csv('C:\\Users\\evely\\IntSys-Education\\a2\\data\\DS2.csv')
 
-print(ds1ForVis.columns)
+#print(ds1ForVis.columns)
 
 #plots the second column of DS1 against the third column of DS1 (uncomment for pretty scatterplot)
 #sns.scatterplot(x='x2', y='x3' , data=ds1ForVis) 
@@ -56,7 +56,7 @@ for i in range(0, ds1ForActualTesting.data.shape[0]):
     labels.append(ds1ForActualTesting.__getitem__(i)[0])
     targets.append(ds1ForActualTesting.__getitem__(i)[1])
 path_to_csv = 'C:\\Users\\evely\\IntSys-Education\\a2\\data\\DS1.csv'
-transform_fn = None  # Can also pass in None here
+transform_fn = lr.data_transform  # None would've
 train_val_test = [0.6, 0.2, 0.2]
 batch_size = 32
 num_param = 3
@@ -80,7 +80,7 @@ for t in range(TOTAL_TIME_STEPS):
 
         optimizer.zero_grad()
         #print(model.thetas)
-        preds = model(input_t)
+        preds = model(input_t)  
         #print(preds)
         #print(y)
         loss = loss_fn(preds, y.view(1,len(y)))  # You might have to change the shape of things here.
