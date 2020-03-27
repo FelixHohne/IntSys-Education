@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
+import pandas as pd
 from data_loader import get_data_loaders
 import typing
 
@@ -17,8 +18,7 @@ class LogisticRegressionModel(nn.Module):
     def __init__(self, num_param):
         ## TODO 1: Set up network
         super(LogisticRegressionModel, self).__init__()
-        self.num_param = num_param
-        self.linear = nn.Linear(self.num_param, 1)
+        pass
 
     def forward(self, x):
         """forward generates the predictions for the input
@@ -40,7 +40,9 @@ class LogisticRegressionModel(nn.Module):
         """
 
         ## TODO 2: Implement the logistic regression on sample x
-        return F.sigmoid(self.linear(x.float()))
+        model = LogisticRegressionModel(logistic_loss)
+        predictions = model(x)
+        pass
 
 
 class MultinomialRegressionModel(nn.Module):
@@ -80,8 +82,9 @@ class MultinomialRegressionModel(nn.Module):
         """
         ## TODO 4: Implement the logistic regression on sample x
         # NOTE: THIS IS A BONUS AND IS NOT EXPECTED FOR YOU TO BE ABLE TO DO
+        model = MultinomialRegressionModel(1, cross_entropy_loss)
+        predictions = model(x)
         pass
-
 
 def logistic_loss(output, target):
     """Creates a criterion that measures the Binary Cross Entropy
@@ -106,8 +109,13 @@ def logistic_loss(output, target):
     """
     # TODO 2: Implement the logistic loss function from the slides using
     # pytorch operations
-    loss = -target*(torch.log(output))-(1-target)*(torch.log(output))
-    return loss.mean()
+    assert target.shape == output.shape
+    loss1 = -1 * target
+    loss1 = loss1 * torch.log(output)
+    loss2 = -1 * (torch.add(target, -1))
+    loss2 = loss2 * torch.log(torch.add(-1 * output, 1))
+    log_loss = torch.sum(torch.add(loss1, -1 * loss2))
+    return torch.div(log_loss, target.shape[0])
 
 
 def cross_entropy_loss(output, target):
@@ -130,39 +138,4 @@ def cross_entropy_loss(output, target):
 if __name__ == "__main__":
     # TODO: Run a sample here
     # Look at linear_regression.py for a hint on how you should do this!!
-    path_to_csv = 'data/DS3.csv'
-    train_val_test = [0.6, 0.2, 0.2]
-    batch_size = 32
-    num_param = 2
-    lr = 0.0001
-    loss_fn = logistic_loss
-    TOTAL_TIME_STEPS = 1000
-
-    train_loader, val_loader, test_loader =\
-       get_data_loaders(path_to_csv,
-                        train_val_test=train_val_test,
-                        batch_size=batch_size)
-
-    model = LogisticRegressionModel(num_param)
-    optimizer = optim.SGD(model.parameters(), lr=lr)
-
-    model.train()
-    for t in range(TOTAL_TIME_STEPS):
-       for batch_index, (input_t, y) in enumerate(train_loader):
-
-            optimizer.zero_grad()
-            preds = model(input_t)
-            #print(preds)
-            #print(y)
-            loss = loss_fn(preds, y.view(1,len(y)))  # You might have to change the shape of things here.
-            loss.backward()
-            #print(loss)
-            optimizer.step()
-    
-    model.eval()
-    for batch_index, (input_t, y) in enumerate(val_loader):
-    
-        preds = model(input_t)
-    
-        loss = loss_fn(preds, y.view(1,len(y)))
-        #print(loss)
+    pass

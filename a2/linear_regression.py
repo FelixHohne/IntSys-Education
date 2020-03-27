@@ -176,10 +176,11 @@ if __name__ == "__main__":
     TOTAL_TIME_STEPS = 100
 
     train_loader, val_loader, test_loader =\
-       get_data_loaders(path_to_csv,
-                        transform_fn=transform_fn,
-                        train_val_test=train_val_test,
-                        batch_size=batch_size)
+        get_data_loaders(
+            path_to_csv,
+            transform_fn=transform_fn,
+            train_val_test=train_val_test,
+            batch_size=batch_size)
 
     model = LinearRegressionModel(num_param)
     optimizer = optim.SGD(model.parameters(), lr=lr)
