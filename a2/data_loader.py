@@ -23,6 +23,7 @@ class SimpleDataset(Dataset):
         inp_df = pd.read_csv(path_to_csv)
         self.data = torch.Tensor(inp_df.values)
         self.transform = transform
+        
 
     def __len__(self):
         """__len__ [summary]
