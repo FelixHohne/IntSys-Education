@@ -442,6 +442,10 @@ def stochastic_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     theta_hist = [theta]
 
     for i in range(steps): 
+        if i % x_row == 0: 
+            p = np.random.permutation(x_row)
+            x = x[p]
+            y = y[p]
         sto_x = x[i % x_row]
         sto_y = y[i % x_row]
         theta = theta - alpha * grad_loss_f(h, grad_h, theta, sto_x, sto_y)
@@ -495,12 +499,16 @@ def minibatch_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
 
     x_row, x_col = x.shape 
     theta = np.random.rand(1, x_col)
-    alpha = 0.001
+    alpha = 0.01
     theta_hist = [theta]
 
-    batch_size = 32
+    batch_size = 4
 
     for i in range(steps): 
+        if i % x_row == 0: 
+            p = np.random.permutation(x_row)
+            x = x[p]
+            y = y[p]
         mini_x = x[(0 + batch_size * i) % x_row: (batch_size + batch_size * i) % x_row]
         mini_y = y[(0 + batch_size * i) % x_row : (batch_size + batch_size * i) % x_row]
         theta = theta - alpha * (1/ batch_size) * grad_loss_f(h, grad_h, theta, mini_x, mini_y) 
@@ -661,7 +669,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        stochastic_grad_descent,
+        minibatch_grad_descent,
         x_support,
         y_support
     )
@@ -672,7 +680,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        stochastic_grad_descent,
+        minibatch_grad_descent,
         x_support,
         y_support
     )
