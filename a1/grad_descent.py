@@ -495,7 +495,7 @@ def minibatch_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
 
     x_row, x_col = x.shape 
     theta = np.random.rand(1, x_col)
-    alpha = 0.01
+    alpha = 0.001
     theta_hist = [theta]
 
     batch_size = 32
