@@ -658,8 +658,10 @@ def matrix_minibatch_gd(h, grad_h, loss_f, grad_loss_f, x, y, steps, batch_size)
 
 def save_linear_gif():
     """simple_linear: description."""
-    x = np.arange(-3,4,0.1).reshape((-1,1))
-    y = 2*np.arange(-3,4,0.1).reshape((-1,1))
+
+    sigma = 0.8 # change this to change the variance + see the effect
+    x = (np.arange(-3,4,0.1)).reshape((-1,1))
+    y = (2*np.arange(-3,4,0.1) + np.random.normal(loc=0.0, scale=sigma, size=(70,))).reshape((-1,1))
     x_support = np.array((0,4))
     y_support = np.array((-0.1,200))
     plot_linear_1d(
@@ -669,7 +671,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        minibatch_grad_descent,
+        stochastic_grad_descent,
         x_support,
         y_support
     )
@@ -680,7 +682,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        minibatch_grad_descent,
+        stochastic_grad_descent,
         x_support,
         y_support
     )
