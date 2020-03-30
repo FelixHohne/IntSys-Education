@@ -4,8 +4,9 @@ import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
 import pandas as pd
-from data_loader import get_data_loaders
+import data_loader as dl
 import typing
+import plotting as plot
 
 class LogisticRegressionModel(nn.Module):
     """LogisticRegressionModel is the logistic regression classifier.
@@ -21,7 +22,7 @@ class LogisticRegressionModel(nn.Module):
         super(LogisticRegressionModel, self).__init__()
         self.num_param = num_param
         self.linear = nn.Linear(self.num_param, 1)
-        self.sigmoid_funct = torch.nn.Sigmoid()
+        #self.sigmoid_funct = torch.nn.sigmoid()
         pass
 
     def forward(self, x):
@@ -45,7 +46,9 @@ class LogisticRegressionModel(nn.Module):
         
 
         ## TODO 2: Implement the logistic regression on sample x
-        return F.sigmoid(self.linear(x.float()))
+        x_tensor=torch.tensor(x)
+        x_tensor=x_tensor.float()
+        return torch.sigmoid(self.linear(x_tensor))
         pass
 
 
@@ -140,6 +143,8 @@ if __name__ == "__main__":
     # Look at linear_regression.py for a hint on how you should do this!!
     pass
     path_to_csv = 'data/DS3.csv'
+    ds3df= pd.read_csv('data/DS3.csv')
+    dataset3=ds3df.to_numpy()
     train_val_test = [0.6, 0.2, 0.2]
     batch_size = 32
     num_param = 2
@@ -148,7 +153,7 @@ if __name__ == "__main__":
     TOTAL_TIME_STEPS = 1000
 
     train_loader, val_loader, test_loader =\
-       get_data_loaders(path_to_csv,
+       dl.get_data_loaders(path_to_csv,
                         train_val_test=train_val_test,
                         batch_size=batch_size)
 
@@ -174,4 +179,6 @@ if __name__ == "__main__":
         preds = model(input_t)
 
         loss = loss_fn(preds, y.view(1,len(y)))
-        #print(loss) 
+        #print(loss)
+
+    plot.plot_binary_logistic_boundary(logreg=model, X=dl.SimpleDataset('data/DS3.csv').data, y=dl.get_all_sample_labels('data/DS3.csv'), xlim=(-10, 10), ylim=(0, 1))

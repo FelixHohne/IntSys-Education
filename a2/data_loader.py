@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset, DataLoader, SubsetRandomSampler
 import torch
+import random
 
 
 class SimpleDataset(Dataset):
@@ -24,7 +25,7 @@ class SimpleDataset(Dataset):
         self.data = inp_df.to_numpy()
         self.num_features = self.data.shape[1]-1
         self.features = self.data[:, :-1]
-        self.targets = self.data[:, -1]
+        self.labels = self.data[:, -1]
         self.transform = transform
         
 
@@ -108,3 +109,13 @@ def get_data_loaders(path_to_csv,
     test_loader = DataLoader(dataset, batch_size=batch_size, sampler=test_sampler)
 
     return train_loader, val_loader, test_loader
+
+
+def get_all_sample_features(path_to_csv):
+    dataset = SimpleDataset(path_to_csv=path_to_csv)
+    return dataset.features
+
+
+def get_all_sample_labels(path_to_csv):
+    dataset = SimpleDataset(path_to_csv=path_to_csv)
+    return dataset.labels

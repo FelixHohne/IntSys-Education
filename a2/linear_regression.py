@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 from data_loader import get_data_loaders
+import plotting as plot
 
 class LinearRegressionModel(nn.Module):
     """LinearRegressionModel is the linear regression regressor.
@@ -155,6 +156,8 @@ if __name__ == "__main__":
     #
     ## Don't worry about loss.backward() for now. Think of it as calculating gradients.
 
+
+
     ## And voila, your model is trained. Now, use something similar to run your model on
     ## the validation and test data loaders:
     # Eg:
@@ -208,5 +211,3 @@ if __name__ == "__main__":
     
         loss = loss_fn(preds, y.view(1,len(y)))
         print(loss)
-    
-

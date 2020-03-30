@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import linear_regression as lr
+import data_loader as dl
 from sklearn.datasets import make_classification
 import typing
+import seaborn as sn
 
 
 def plot_binary_logistic_boundary(logreg, X, y, xlim, ylim):
@@ -21,7 +24,7 @@ def plot_binary_logistic_boundary(logreg, X, y, xlim, ylim):
 
     xx, yy = np.mgrid[xlim[0]:xlim[1]:.01, ylim[0]:ylim[1]:.01]
     grid = np.c_[xx.ravel(), yy.ravel()]
-    probs = logreg(grid)[:, 1].reshape(xx.shape)
+    probs = logreg(grid)[:, 1].reshape(xx.shape) #causing index out of bounds. will check again tmr
 
     f, ax = plt.subplots(figsize=(8, 6))
     contour = ax.contourf(xx, yy, probs, 25, cmap="RdBu",
@@ -68,5 +71,6 @@ def plot_linear_1D(linreg, X, y, xlim, ylim):
     :param ylim: min and max :math:`y` values for the plot
     :type ylim: typing.Tuple[int, int]
     """
+
     pass
-    
+

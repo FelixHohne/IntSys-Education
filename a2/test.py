@@ -32,3 +32,4 @@ torch.t(t3)
 
 testArray = [1, 2, 3, 4, 5]
 print(testArray[0 : -1])
+
