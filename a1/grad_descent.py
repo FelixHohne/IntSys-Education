@@ -381,16 +381,16 @@ def grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     """
     
     x_row, x_col = x.shape
-    theta =np.random.rand(x_col)
+    theta =np.random.rand(1, x_col)
 
     alpha = 0.01
-    theta_hist = theta.tolist()
+    theta_hist = [theta]
 
     for i in range(steps):     
-        theta = theta - alpha * grad_loss_f(h, grad_h, theta, x, y) * loss_f(h, grad_h, theta, x, y)
-        theta_hist = theta_hist + theta.tolist()
+        theta = theta - alpha * (1/x_row) * grad_loss_f(h, grad_h, theta, x, y)
+        theta_hist.append(theta)
     
-    theta_hist = np.asarray(theta_hist)
+    theta_hist = np.array(theta_hist)
     return (theta, theta_hist)
 
 
@@ -435,20 +435,23 @@ def stochastic_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
+
     x_row, x_col = x.shape 
-    theta = np.random.random(x_col)
+    theta = np.random.rand(1, x_col)
     alpha = 0.01
-    theta_hist = theta.tolist()
+    theta_hist = [theta]
 
-    np.random.shuffle(x)
+    for i in range(steps): 
+        if i % x_row == 0: 
+            p = np.random.permutation(x_row)
+            x = x[p]
+            y = y[p]
+        sto_x = x[i % x_row]
+        sto_y = y[i % x_row]
+        theta = theta - alpha * grad_loss_f(h, grad_h, theta, sto_x, sto_y)
+        theta_hist.append(theta)
 
-    for i in range(0, steps): 
-        sto_x = x[i]
-        sto_y = y[i]
-        theta = theta - alpha * grad_loss_f(h, grad_h, theta, sto_x, sto_y) * loss_f(h, grad_h, theta, sto_x, sto_y)
-        theta_hist = theta_hist + theta.tolist()
-
-    theta_hist = np.asarray(theta_hist)
+    theta_hist = np.array(theta_hist)
     return (theta, theta_hist)
 
     
@@ -495,21 +498,22 @@ def minibatch_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     """
 
     x_row, x_col = x.shape 
-    theta = np.random.random(x_col)
+    theta = np.random.rand(1, x_col)
     alpha = 0.01
-    theta_hist = theta.tolist()
+    theta_hist = [theta]
 
-    np.random.shuffle(x)
+    batch_size = 4
 
-    batch_size = 32
-
-    for i in range(0, steps): 
-        mini_x = x[0 + batch_size * i: batch_size + batch_size * i]
-        mini_y = y[0 + batch_size * i: batch_size + batch_size * i]
-        theta = theta - alpha * grad_loss_f(h, grad_h, theta, mini_x, mini_y) * loss_f(h, grad_h, theta, mini_x, mini_y)
-        theta_hist = theta_hist + theta.tolist()
-
-    theta_hist = np.asarray(theta_hist)
+    for i in range(steps): 
+        if i % x_row == 0: 
+            p = np.random.permutation(x_row)
+            x = x[p]
+            y = y[p]
+        mini_x = x[(0 + batch_size * i) % x_row: (batch_size + batch_size * i) % x_row]
+        mini_y = y[(0 + batch_size * i) % x_row : (batch_size + batch_size * i) % x_row]
+        theta = theta - alpha * (1/ batch_size) * grad_loss_f(h, grad_h, theta, mini_x, mini_y) 
+        theta_hist.append(theta)
+    theta_hist = np.array(theta_hist)
     return (theta, theta_hist)
 
 
@@ -555,17 +559,7 @@ def matrix_gd(h, grad_h, loss_f, grad_loss_f, x, y, steps, batch_size):
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
-    x_row, x_col = x.shape 
-    theta = np.random.random(x_col)
-    alpha = 0.01
-    theta_hist = theta.tolist()
-
-    for i in range(0, steps): 
-        theta = theta - alpha * grad_loss_f(h, grad_h, theta, x, y) * loss_f(h, grad_h, theta, x, y)
-        theta_hist = theta_hist + theta.tolist()
-    
-    theta_hist = np.asarray(theta_hist)
-    return (theta, theta_hist)
+    return grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps)
     
 
 
@@ -608,21 +602,8 @@ def matrix_sgd(h, grad_h, loss_f, grad_loss_f, x, y, steps):
     :return: The ideal parameters and the list of paramters through time
     :rtype: tuple[np.ndarray, np.ndarray]
     """
-    x_row, x_col = x.shape 
-    theta = np.random.random(x_col)
-    alpha = 0.01
-    theta_hist = theta.tolist()
-
-    np.random.shuffle(x)
-
-    for i in range(0, steps): 
-        sto_x = x[i]
-        sto_y = y[i]
-        theta = theta - alpha * grad_loss_f(h, grad_h, theta, sto_x, sto_y) * loss_f(h, grad_h, theta, sto_x, sto_y)
-        theta_hist = theta_hist + theta.tolist()
-
-    theta_hist = np.asarray(theta_hist)
-    return (theta, theta_hist)
+    
+    return stochastic_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps)
 
 
 
@@ -668,23 +649,7 @@ def matrix_minibatch_gd(h, grad_h, loss_f, grad_loss_f, x, y, steps, batch_size)
     :rtype: tuple[np.ndarray, np.ndarray]
     """
 
-    x_row, x_col = x.shape 
-    theta = np.random.random(x_col)
-    alpha = 0.01
-    theta_hist = theta.tolist()
-
-    np.random.shuffle(x)
-
-    batch_size = 32
-
-    for i in range(0, steps): 
-        mini_x = x[0 + batch_size * i: batch_size + batch_size * i]
-        mini_y = y[0 + batch_size * i: batch_size + batch_size * i]
-        theta = theta - alpha * grad_loss_f(h, grad_h, theta, mini_x, mini_y) * loss_f(h, grad_h, theta, mini_x, mini_y)
-        theta_hist = theta_hist + theta.tolist()
-
-    theta_hist = np.asarray(theta_hist)
-    return (theta, theta_hist)
+    return minibatch_grad_descent(h, grad_h, loss_f, grad_loss_f, x, y, steps)
 
 
 # ============================================================================
@@ -693,8 +658,10 @@ def matrix_minibatch_gd(h, grad_h, loss_f, grad_loss_f, x, y, steps, batch_size)
 
 def save_linear_gif():
     """simple_linear: description."""
-    x = np.arange(-3,4,0.1).reshape((-1,1))
-    y = 2*np.arange(-3,4,0.1).reshape((-1,1))
+
+    sigma = 0.8 # change this to change the variance + see the effect
+    x = (np.arange(-3,4,0.1)).reshape((-1,1))
+    y = (2*np.arange(-3,4,0.1) + np.random.normal(loc=0.0, scale=sigma, size=(70,))).reshape((-1,1))
     x_support = np.array((0,4))
     y_support = np.array((-0.1,200))
     plot_linear_1d(
@@ -704,7 +671,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        grad_descent,
+        stochastic_grad_descent,
         x_support,
         y_support
     )
@@ -715,7 +682,7 @@ def save_linear_gif():
         grad_l2_loss,
         x,
         y,
-        grad_descent,
+        stochastic_grad_descent,
         x_support,
         y_support
     )
