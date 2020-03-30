@@ -22,6 +22,9 @@ class SimpleDataset(Dataset):
         ## Look up how to read .csv files using Python. This is common for datasets in projects.
         inp_df = pd.read_csv(path_to_csv)
         self.data = inp_df.to_numpy()
+        self.num_features = self.data.shape[1]-1
+        self.features = self.data[:, :-1]
+        self.targets = self.data[:, -1]
         self.transform = transform
         
 
@@ -55,7 +58,7 @@ class SimpleDataset(Dataset):
         if self.transform:
             sample = self.transform(sample)
         # make tensor below -E
-        x = torch.from_numpy(np.array(sample[:-1])) 
+        x = torch.from_numpy(np.array(sample[:-1]))
         y = torch.from_numpy(np.array(sample[-1]))
         return x,y
 
@@ -83,15 +86,15 @@ def get_data_loaders(path_to_csv,
     # Then, we create a list of indices for all samples in the dataset.
     dataset_size = len(dataset)
     indices = list(range(dataset_size))
-    #random.shuffle -E 
+    random.shuffle(indices)
 
     ## TODO: Rewrite this section so that the indices for each dataset split
     ## are formed.
 
     ## BEGIN: YOUR CODE
-    train_indices = indices[:int(dataset_size*0.6)]
-    val_indices = indices[int(dataset_size*0.6):int(dataset_size*0.8)]
-    test_indices = indices[int(dataset_size*0.8):]
+    train_indices = indices[:int(dataset_size*train_val_test[0])]
+    val_indices = indices[int(dataset_size*train_val_test[0]):int(dataset_size*train_val_test[1])]
+    test_indices = indices[int(dataset_size*(train_val_test[0])+train_val_test[1]):]
     ## END: YOUR CODE
 
     # Now, we define samplers for each of the train, val and test data

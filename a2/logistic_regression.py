@@ -21,7 +21,7 @@ class LogisticRegressionModel(nn.Module):
         super(LogisticRegressionModel, self).__init__()
         self.num_param = num_param
         self.linear = nn.Linear(self.num_param, 1)
-        
+        self.sigmoid_funct = torch.nn.Sigmoid()
         pass
 
     def forward(self, x):
