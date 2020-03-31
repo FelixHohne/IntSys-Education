@@ -135,8 +135,10 @@ def cross_entropy_loss(output, target):
     :rtype: torch.Tensor
     """
     # NOTE: THIS IS A BONUS AND IS NOT EXPECTED FOR YOU TO BE ABLE TO DO
-    return 0
 
+def percent_error(output, target):
+    loss = torch.abs(target-output)
+    return torch.mean(loss)*100
 
 if __name__ == "__main__":
     # TODO: Run a sample here
@@ -145,7 +147,7 @@ if __name__ == "__main__":
     path_to_csv = 'data/DS3.csv'
     ds3df= pd.read_csv('data/DS3.csv')
     dataset3=ds3df.to_numpy()
-    train_val_test = [0.6, 0.2, 0.2]
+    train_val_test = [0.8, 0.1, 0.1]
     batch_size = 32
     num_param = 2
     lr = 0.0001
@@ -174,11 +176,15 @@ if __name__ == "__main__":
             optimizer.step()
 
     model.eval()
+
     for batch_index, (input_t, y) in enumerate(val_loader):
 
         preds = model(input_t)
 
-        loss = loss_fn(preds, y.view(1,len(y)))
-        #print(loss)
+        #loss = loss_fn(preds, y.view(1,len(y)))
+        #print(y.view(1, len(y)))
+        loss = percent_error(preds, y.view(1, len(y)))
 
-    plot.plot_binary_logistic_boundary(logreg=model, X=dl.SimpleDataset('data/DS3.csv').data, y=dl.get_all_sample_labels('data/DS3.csv'), xlim=(-10, 10), ylim=(-10, 10))
+        print(loss)
+
+    #plot.plot_binary_logistic_boundary(logreg=model, X=dl.SimpleDataset('data/DS3.csv').data, y=dl.get_all_sample_labels('data/DS3.csv'), xlim=(-10, 10), ylim=(-10, 10))

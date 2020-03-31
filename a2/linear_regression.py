@@ -2,7 +2,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import numpy as np
-from data_loader import get_data_loaders
+import pandas as pd
+import data_loader as dl
 import plotting as plot
 
 class LinearRegressionModel(nn.Module):
@@ -116,8 +117,11 @@ def mae_loss(output, target):
     size = target.shape
     n = size[1]
     #change to mean later -E
-    return torch.div(mse,n)
+    return torch.mean(loss)
 
+def percent_error(output, target):
+    loss = torch.div(torch.abs(target-output), target)
+    return torch.mean(loss)*100
 
 if __name__ == "__main__":
     ## Here you will want to create the relevant dataloaders for the csv files for which
@@ -171,9 +175,11 @@ if __name__ == "__main__":
     ## You don't need to do loss.backward() or optimizer.step() here since you are no
     ## longer training.
 
-    path_to_csv = 'C:\\Users\\evely\\IntSys-Education\\a2\\data\\DS1.csv'
+    path_to_csv = 'data/DS1.csv'
+    ds1df= pd.read_csv('data/DS1.csv')
+    dataset1=ds1df.to_numpy()
     transform_fn = data_transform  # Can also pass in None here
-    train_val_test = [0.6, 0.2, 0.2]
+    train_val_test = [0.8, 0.1, 0.1]
     batch_size = 32
     num_param = 3
     lr = 0.01
@@ -181,7 +187,7 @@ if __name__ == "__main__":
     TOTAL_TIME_STEPS = 100
 
     train_loader, val_loader, test_loader =\
-        get_data_loaders(
+        dl.get_data_loaders(
             path_to_csv,
             transform_fn=transform_fn,
             train_val_test=train_val_test,
@@ -203,11 +209,17 @@ if __name__ == "__main__":
             loss.backward()
             #print(loss)
             optimizer.step()
-    
+
     model.eval()
+
+
     for batch_index, (input_t, y) in enumerate(val_loader):
-    
+
         preds = model(input_t)
     
-        loss = loss_fn(preds, y.view(1,len(y)))
+        #loss = loss_fn(preds, y.view(1,len(y)))
+
+        loss = percent_error(preds, y.view(1, len(y)))
         print(loss)
+
+#plot.plot_binary_logistic_boundary(logreg=model, X=dl.SimpleDataset('data/DS1.csv').data, y=dl.get_all_sample_labels('data/DS1.csv'), xlim=(-10, 10), ylim=(-10, 10))

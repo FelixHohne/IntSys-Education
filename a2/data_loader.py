@@ -94,8 +94,8 @@ def get_data_loaders(path_to_csv,
 
     ## BEGIN: YOUR CODE
     train_indices = indices[:int(dataset_size*train_val_test[0])]
-    val_indices = indices[int(dataset_size*train_val_test[0]):int(dataset_size*train_val_test[1])]
-    test_indices = indices[int(dataset_size*(train_val_test[0])+train_val_test[1]):]
+    val_indices = indices[int(dataset_size*train_val_test[0]):int(dataset_size*(train_val_test[0]+train_val_test[1]))]
+    test_indices = indices[int(dataset_size*(train_val_test[0]+train_val_test[1])):]
     ## END: YOUR CODE
 
     # Now, we define samplers for each of the train, val and test data

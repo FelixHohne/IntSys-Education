@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import linear_regression as lr
 import data_loader as dl
 from sklearn.datasets import make_classification
 import typing
