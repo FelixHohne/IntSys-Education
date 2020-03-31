@@ -4,6 +4,7 @@ import data_loader as dl
 from sklearn.datasets import make_classification
 import typing
 import seaborn as sn
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def plot_binary_logistic_boundary(logreg, X, y, xlim, ylim):
@@ -57,9 +58,55 @@ def plot_binary_logistic_boundary(logreg, X, y, xlim, ylim):
     plt.show()
 
 
+def plot_linear(output, input, target):
+    """Plotting function I found on Google. Plots the predictions and
+    outputs as two sets of points on a 3D Scatterplot.
+    """
+    fig = plt.figure()
+    ax = fig.add_subplot(projection = '3d')
+
+    feature1 = input[:, 1].detach()
+    feature2 = input[:, 2].detach()
+    predictions = output[0].detach()
+    targets = target
+
+    modelPreds = ax.scatter(feature1, feature2, predictions, c='b', marker='o')
+    dataLabels = ax.scatter(feature1, feature2, targets, c='r', marker='^')
+
+    plt.legend((modelPreds, dataLabels), ('Predictions By Model', 'Labels From Dataset'))
+
+    ax.set_xlabel('X1')
+    ax.set_ylabel('X2')
+    ax.set_zlabel('Y')
+
+    plt.show()
+
+def plot_linear_2D(output, input, target):
+
+    """Simplification of plot_linear.
+    """
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    feature1 = input[:, 1].detach()
+    predictions = output[0].detach()
+    targets = target
+
+    modelPreds = ax.scatter(feature1, predictions, c='b', marker='o')
+    dataLabels = ax.scatter(feature1, targets, c='r', marker='^')
+
+    ax.set_xlabel('X1')
+    ax.set_ylabel('Y')
+
+    plt.legend((modelPreds, dataLabels), ('Predictions By Model', 'Labels From Dataset'))
+
+    plt.show()
+
 def plot_linear_1D(linreg, X, y, xlim, ylim):
+
     """Plots the best plane given by the trained linear regressor
-    
+
     :param logreg: Logistic Regrssor model
     :type logreg: linear_regression.LinearRegressionModel
     :param X: The features and samples used to train
@@ -70,7 +117,7 @@ def plot_linear_1D(linreg, X, y, xlim, ylim):
     :type xlim: typing.Tuple[int, int]
     :param ylim: min and max :math:`y` values for the plot
     :type ylim: typing.Tuple[int, int]
+
     """
 
     pass
-

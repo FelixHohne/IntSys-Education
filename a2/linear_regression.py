@@ -120,7 +120,7 @@ def mae_loss(output, target):
     return torch.mean(loss)
 
 def percent_error(output, target):
-    loss = torch.div(torch.abs(target-output), target)
+    loss = torch.abs(torch.div(torch.abs(target-output), target))
     return torch.mean(loss)*100
 
 if __name__ == "__main__":
@@ -212,14 +212,19 @@ if __name__ == "__main__":
 
     model.eval()
 
-
     for batch_index, (input_t, y) in enumerate(val_loader):
 
         preds = model(input_t)
-    
-        #loss = loss_fn(preds, y.view(1,len(y)))
 
-        loss = percent_error(preds, y.view(1, len(y)))
-        print(loss)
+        print(preds)
+        loss = loss_fn(preds, y.view(1,len(y)))
 
-#plot.plot_binary_logistic_boundary(logreg=model, X=dl.SimpleDataset('data/DS1.csv').data, y=dl.get_all_sample_labels('data/DS1.csv'), xlim=(-10, 10), ylim=(-10, 10))
+        """Uncomment below for the percent error across the eval set"""
+
+        #percentError = percent_error(preds, y.view(1, len(y)))
+        #print(percentError)
+
+        """Function plot_linear is used for Dataset 1 because it has two features.
+        Use function plot_linear_2D for Dataset 2."""
+
+        plot.plot_linear(preds, input_t, y.view(1, len(y)))
