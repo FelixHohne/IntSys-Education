@@ -24,7 +24,8 @@ def plot_binary_logistic_boundary(logreg, X, y, xlim, ylim):
 
     xx, yy = np.mgrid[xlim[0]:xlim[1]:.01, ylim[0]:ylim[1]:.01]
     grid = np.c_[xx.ravel(), yy.ravel()]
-    probs = logreg(grid)[:, 1].reshape(xx.shape) #causing index out of bounds. will check again tmr
+    probs = logreg(grid)[:, 0].reshape(xx.shape)
+    probs = probs.detach()
 
     f, ax = plt.subplots(figsize=(8, 6))
     contour = ax.contourf(xx, yy, probs, 25, cmap="RdBu",

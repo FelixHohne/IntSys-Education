@@ -181,4 +181,4 @@ if __name__ == "__main__":
         loss = loss_fn(preds, y.view(1,len(y)))
         #print(loss)
 
-    plot.plot_binary_logistic_boundary(logreg=model, X=dl.SimpleDataset('data/DS3.csv').data, y=dl.get_all_sample_labels('data/DS3.csv'), xlim=(-10, 10), ylim=(0, 1))
+    plot.plot_binary_logistic_boundary(logreg=model, X=dl.SimpleDataset('data/DS3.csv').data, y=dl.get_all_sample_labels('data/DS3.csv'), xlim=(-10, 10), ylim=(-10, 10))
