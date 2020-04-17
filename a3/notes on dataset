@@ -1,0 +1,6 @@
+The size of each image should be 56 px x 56 px
+All of them are squares- just resizing them should be fine.
+Images rotated by 45 degrees have parts of the sample cut off. Could present a problem in training. 
+No efficient way to fix them for now. 
+Only the first 60 need to be rotated.
+Will check the labels tonight. 
