@@ -28,16 +28,12 @@ class SimpleDataset(Dataset):
         self.data = pickle.load(pkl_file)
         pkl_file.close()
         self.labels = np.fromfile(path_to_labels)
-        ## pass
 
     def __len__(self):
         """__len__ [summary]
-        
         [extended_summary]
         """
-        ## TODO: Returns the length of the dataset.
-        return self.labels.shape[0] # will come back to this later
-        ## pass
+        return self.labels.shape[0] 
 
     def __getitem__(self, index):
         """__getitem__ [summary]
@@ -51,7 +47,7 @@ class SimpleDataset(Dataset):
         ## The returned sample should be a tuple (x, y) where x is your input 
         ## vector and y is your label
         ## Before returning your sample, you should check if there is a transform
-        ## sepcified, and pply that transform to your sample
+        ## specified, and apply that transform to your sample
         # Eg:
         # if self.transform:
         #   sample = self.transform(sample)
