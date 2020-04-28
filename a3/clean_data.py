@@ -57,11 +57,11 @@ if __name__ == "__main__":
   ## for input, so that you can input the angle and the missing label
   ## Remember, the first 60 images are rotated, and might contain missing labels.
 
-  with zipfile.ZipFile('a3\\data\\data.zip', 'r') as zip_ref:
+  with zipfile.ZipFile('C:\\Users\\evely\\IntSys-Education\\a3\\data\\data.zip', 'r') as zip_ref:
     zip_ref.extractall()
-  pkl_file = open('a3\\images.pkl', 'rb')
+  pkl_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\images.pkl', 'rb')
   data = pickle.load(pkl_file)
-  label_pkl = open('a3\\labels.pkl', 'rb')
+  label_pkl = open('C:\\Users\\evely\\IntSys-Education\\a3\\labels.pkl', 'rb')
   label_data = pickle.load(label_pkl)
 
   label_data[0][3] = 3
@@ -96,6 +96,7 @@ if __name__ == "__main__":
 
   train_indices = index_shuffled[:int(0.8*len(data))]
   val_indices = index_shuffled[int(0.8*len(data)):int(0.9*len(data))]
+  test_indices = index_shuffled[int(0.9*len(data)):]
 
   train_labels = []
   train_samples = []
@@ -104,11 +105,11 @@ if __name__ == "__main__":
     train_labels.append(label_data[train_indices[i]])
     train_samples.append(data[train_indices[i]])
 
-  t_labels_file = open('a3\\data\\train\\correct_train_labels.pkl', 'wb')
+  t_labels_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\data\\train\\correct_train_labels.pkl', 'wb')
   pickle.dump(train_labels, t_labels_file)
   t_labels_file.close()
 
-  t_samples_file = open('a3\\data\\train\\train_samples.pkl', 'wb')
+  t_samples_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\data\\train\\train_samples.pkl', 'wb')
   pickle.dump(train_samples, t_samples_file)
   t_samples_file.close()
 
@@ -119,10 +120,25 @@ if __name__ == "__main__":
     val_labels.append(label_data[val_indices[i]])
     val_samples.append(data[val_indices[i]])
 
-  v_labels_file = open('a3\\data\\val\\correct_val_labels.pkl', 'wb')
+  v_labels_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\data\\val\\correct_val_labels.pkl', 'wb')
   pickle.dump(val_labels, v_labels_file)
   v_labels_file.close()
 
-  v_samples_file = open('a3\\data\\val\\val_samples.pkl', 'wb')
+  v_samples_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\data\\val\\val_samples.pkl', 'wb')
   pickle.dump(val_samples, v_samples_file)
   v_samples_file.close()
+
+  test_labels = []
+  test_samples = []
+
+  for i in range(0, len(test_indices)):
+    test_labels.append(label_data[test_indices[i]])
+    test_samples.append(data[test_indices[i]])
+
+  te_labels_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\data\\test\\correct_test_labels.pkl', 'wb')
+  pickle.dump(test_labels, te_labels_file)
+  te_labels_file.close()
+
+  te_samples_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\data\\test\\test_samples.pkl', 'wb')
+  pickle.dump(test_samples, te_samples_file)
+  te_samples_file.close()

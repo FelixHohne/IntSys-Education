@@ -27,7 +27,9 @@ class SimpleDataset(Dataset):
         pkl_file = open(path_to_pkl, 'rb')
         self.data = pickle.load(pkl_file)
         pkl_file.close()
-        self.labels = np.fromfile(path_to_labels)
+        label_pkl = open(path_to_labels, 'rb')
+        self.labels = pickle.load(label_pkl)
+        label_pkl.close()
 
     def __len__(self):
         """__len__ [summary]
@@ -56,9 +58,9 @@ class SimpleDataset(Dataset):
         return tup_item
 
 
-def get_data_loaders(path_to_pkl, 
-                     path_to_labels,
-                     train_val_test=[0.8, 0.1, 0.1],
+def get_data_loaders(path_to_train_pkl,
+                     path_to_train_labels, path_to_val_labels,
+                     path_to_val_pkl, path_to_test_pkl, path_to_test_labels,
                      batch_size=32):
     """get_data_loaders [summary]
     
@@ -74,32 +76,32 @@ def get_data_loaders(path_to_pkl,
     :rtype: [type]
     """
     # First we create the dataset given the path to the .csv file
-    dataset = SimpleDataset(path_to_pkl, path_to_labels)
+
+    train_dataset = SimpleDataset(path_to_train_pkl, path_to_train_labels)
+    val_dataset = SimpleDataset(path_to_val_pkl, path_to_val_labels)
+    test_dataset = SimpleDataset(path_to_test_pkl, path_to_test_labels)
 
     # Then, we create a list of indices for all samples in the dataset.
-    dataset_size = len(dataset)
-    indices = list(range(dataset_size))
-    random.shuffle(indices)
 
     ## TODO: Rewrite this section so that the indices for each dataset split
     ## are formed. You can take your code from last time
 
     ## BEGIN: YOUR CODE
-    t_inds = train_val_test[0]*len(dataset)
+    """t_inds = train_val_test[0]*len(dataset)
     v_inds = t_inds + train_val_test[1]*len(dataset)
     train_indices = indices[:t_inds]
     val_indices = indices[t_inds:v_inds]
-    test_indices = indices[v_inds:]
+    test_indices = indices[v_inds:]"""
     ## END: YOUR CODE
 
     # Now, we define samplers for each of the train, val and test data
-    train_sampler = SubsetRandomSampler(train_indices)
-    train_loader = DataLoader(dataset, batch_size=batch_size, sampler=train_sampler)
+    train_sampler = SubsetRandomSampler(list(range(len(train_dataset))))
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, sampler=train_sampler)
 
-    val_sampler = SubsetRandomSampler(val_indices)
-    val_loader = DataLoader(dataset, batch_size=batch_size, sampler=val_sampler)
+    val_sampler = SubsetRandomSampler(list(range(len(val_dataset))))
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, sampler=val_sampler)
 
-    test_sampler = SubsetRandomSampler(test_indices)
-    test_loader = DataLoader(dataset, batch_size=batch_size, sampler=test_sampler)
+    test_sampler = SubsetRandomSampler(list(range(len(test_dataset))))
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, sampler=test_sampler)
 
     return train_loader, val_loader, test_loader

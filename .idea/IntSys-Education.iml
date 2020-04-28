@@ -16,6 +16,7 @@
       <sourceFolder url="file://$MODULE_DIR$/a3/data" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/a3/data/train" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/a3/data/val" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/a3/data/test" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="inheritedJdk" />
