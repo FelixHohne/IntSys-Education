@@ -12,6 +12,10 @@
       <sourceFolder url="file://$MODULE_DIR$/a1" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/a2" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/a2/data" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/a3" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/a3/data" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/a3/data/train" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/a3/data/val" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="inheritedJdk" />

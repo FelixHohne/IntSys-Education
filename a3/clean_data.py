@@ -2,6 +2,7 @@ import pickle
 import numpy as np
 from PIL import Image
 import zipfile
+import random
 
 def load_pickle_file(path_to_file):
   """
@@ -56,15 +57,72 @@ if __name__ == "__main__":
   ## for input, so that you can input the angle and the missing label
   ## Remember, the first 60 images are rotated, and might contain missing labels.
 
-  with zipfile.ZipFile('C:\\Users\\evely\\Temp\\IntSys-Education\\a3\\data\\data.zip', 'r') as zip_ref:
+  with zipfile.ZipFile('a3\\data\\data.zip', 'r') as zip_ref:
     zip_ref.extractall()
-  pkl_file = open('C:\\Users\\evely\\Temp\\IntSys-Education\\a3\\images.pkl', 'rb')
+  pkl_file = open('a3\\images.pkl', 'rb')
   data = pickle.load(pkl_file)
+  label_pkl = open('a3\\labels.pkl', 'rb')
+  label_data = pickle.load(label_pkl)
+
+  label_data[0][3] = 3
+  label_data[1][1] = 2
+  label_data[2][2] = 3
+  label_data[3][0] = 5
+  label_data[4][0] = 1
+  label_data[5][1] = 1
+  label_data[6][3] = 2
+  label_data[7][3] = 3
+  label_data[8][0] = 6
+  label_data[9][3] = 2
+  label_data[10][1] = 7
+  label_data[11][2] = 7
+  label_data[12][1] = 3
+  label_data[13][2] = 6
+  label_data[14][0] = 0
 
   resized = []
   for i in range(0, len(data)):
     resized.append(resize(data[i]))
 
+  rotation_angles = [90,-45,180,-45,-90,-90,-45,90,180,90,315,180,-90,180,180]
 
+  for i in range(0, len(rotation_angles)):
+    resized[i] = rotate(resized[i], rotation_angles[i])
 
-  pass
+  data = resized
+
+  index_shuffled = list(range(len(data)))
+  random.shuffle(index_shuffled)
+
+  train_indices = index_shuffled[:int(0.8*len(data))]
+  val_indices = index_shuffled[int(0.8*len(data)):int(0.9*len(data))]
+
+  train_labels = []
+  train_samples = []
+
+  for i in range(0, len(train_indices)):
+    train_labels.append(label_data[train_indices[i]])
+    train_samples.append(data[train_indices[i]])
+
+  t_labels_file = open('a3\\data\\train\\correct_train_labels.pkl', 'wb')
+  pickle.dump(train_labels, t_labels_file)
+  t_labels_file.close()
+
+  t_samples_file = open('a3\\data\\train\\train_samples.pkl', 'wb')
+  pickle.dump(train_samples, t_samples_file)
+  t_samples_file.close()
+
+  val_labels = []
+  val_samples = []
+
+  for i in range(0, len(val_indices)):
+    val_labels.append(label_data[val_indices[i]])
+    val_samples.append(data[val_indices[i]])
+
+  v_labels_file = open('a3\\data\\val\\correct_val_labels.pkl', 'wb')
+  pickle.dump(val_labels, v_labels_file)
+  v_labels_file.close()
+
+  v_samples_file = open('a3\\data\\val\\val_samples.pkl', 'wb')
+  pickle.dump(val_samples, v_samples_file)
+  v_samples_file.close()
