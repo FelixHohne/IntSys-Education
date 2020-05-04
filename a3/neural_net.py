@@ -61,7 +61,8 @@ class SimpleConvNetModel(nn.Module):
         # represent the output_shape (tuple of 2 ints, tuple of 1 int, just an
         # int , etc).
         raise NotImplementedError()
-    
+
+
     def forward(x):
         """forward generates the prediction for the input x.
         

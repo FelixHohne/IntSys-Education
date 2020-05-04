@@ -1,0 +1,31 @@
+Notes as of Apr 27, 2020:
+* The data is cleaned and has been zipped into .pkl files. There are three folders - train, val, and test. The samples have
+  been split 80%/10%/10% for each folder respectively
+* Folders train, val, and test each have two .pkl files in them- one contains samples and the other labels. As a dataset, 
+  they behave just like a list, so all the normal Py list stuff should work. 
+* The data has been shuffled around in clean_data already. If you re-run clean_data, it should give you a different dataset 
+  each time. The labels are matched to the samples.
+* data_loader has been updated to reflect changes in clean_data. Since most of the shuffling legwork is done in clean_data,
+  data_loader just unpacks the .pkl files from the folders and puts them into the sampler and loader constructors. It should 
+  work, but I haven't tested it yet. 
+* Notes on the Data: Each image in the dataset has four 28x28 samples stitched together into one 56x56 image. The labels are 
+  numbers from 0 to 9, each representing some kind of clothing. Each item in the list of labels is an array of four labels.
+  So, if you had a label array like [1, 2, 3, 4], the image it belonged to would be four images arranged like this:
+
+                                    _______________
+                                   |       |       |
+                                   |   1   |   2   |
+                                   |_______|_______|
+                                   |       |       |
+                                   |   3   |   4   |
+                                   |_______|_______|
+
+
+* Labels and more FashionMNIST info can be found here: https://github.com/zalandoresearch/fashion-mnist
+* Some ramblings on the few samples I looked at today: While most classes have pretty obvious distinctions - none of the shoe 
+  samples look like shirts, none of the pants look like shoes, etc.- some classes are very similar, most notably the Pullovers, 
+  Coats, and Longsleeve Shirts (labelled 2, 4, and 6 respectively), some of the Dresses and the Coats (labelled 3 and 4 
+  respectively), and the T-Shirts/Tops and the Shirts (labelled 0 and 6 respectively). We might have to account for these 
+  similarities in the loss function- it might be an issue if the loss of mistaking a shoe for a T-shirt is the same as the loss 
+  for mistaking a Shirt for a T-Shirt/Top. This is just food for thought, though- it shouldn't affect the implementation of A3 for 
+  the most part. 

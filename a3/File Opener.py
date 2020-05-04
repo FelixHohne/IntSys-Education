@@ -2,14 +2,15 @@ import pickle
 import zipfile
 from PIL import Image
 
-with zipfile.ZipFile('a3\\data\\data.zip', 'r') as zip_ref:
-    zip_ref.extractall()
 
-ct_pkl_file = open('a3\\data\\train\\correct_train_labels.pkl', 'rb')
+
+ct_pkl_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\data\\train\\correct_train_labels.pkl', 'rb')
 label_data = pickle.load(ct_pkl_file)
 
-ts_pkl_file = open('a3\\data\\train\\train_samples.pkl', 'rb')
+ts_pkl_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\data\\train\\train_samples.pkl', 'rb')
 samples = pickle.load(ts_pkl_file)
+
+print(len(list(samples[0].crop().getdata())))
 
 """missing_labels = []
 
