@@ -60,9 +60,12 @@ class SimpleConvNetModel(nn.Module):
         # the input size should be and you have to determine the best way to
         # represent the output_shape (tuple of 2 ints, tuple of 1 int, just an
         # int , etc).
-        raise NotImplementedError()
 
 
+        self.conv1 = nn.Conv2d(1,1,5)
+        self.conv2 = nn.Conv2d(1,1,5)
+        
+    
     def forward(x):
         """forward generates the prediction for the input x.
         
@@ -71,12 +74,16 @@ class SimpleConvNetModel(nn.Module):
         :return: The prediction of the model
         :rtype: np.ndarray
         """
-        raise NotImplementedError()
+        x = F.relu(self.conv1(x))
+        return F.relu(self.conv2(x))
 
 
 if __name__ == "__main__":
     neural_net = SimpleNeuralNetModel([400,200,10])
     print(neural_net.linears)
+    
+    cnn = SimpleConvNetModel((20,20), (20*1))
+    print(cnn)
     train_load, val_load, test_load = get_data_loaders('train/train_samples.pkl',
                                                        'train/correct_train_labels.pkl',
                                                        'val/val_samples.pkl',
