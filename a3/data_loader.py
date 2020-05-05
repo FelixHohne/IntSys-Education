@@ -25,7 +25,15 @@ class SimpleDataset(Dataset):
         #   lines = ...
         ## Look up how to read .csv files using Python. This is common for datasets in projects.
         pkl_file = open(path_to_pkl, 'rb')
-        self.data = pickle.load(pkl_file)
+        raw_images = pickle.load(pkl_file)
+        dat = []
+        for i in range(len(raw_images)):
+            s1 = raw_images[i].crop((0, 0, 28, 28)).getdata()
+            s2 = raw_images[i].crop((28, 0, 56, 28)).getdata()
+            s3 = raw_images[i].crop((0, 28, 28, 56)).getdata()
+            s4 = raw_images[i].crop((28, 28, 56, 56)).getdata()
+            dat.append([s1, s2, s3, s4])
+        self.data = dat
         pkl_file.close()
         label_pkl = open(path_to_labels, 'rb')
         self.labels = pickle.load(label_pkl)
@@ -35,7 +43,7 @@ class SimpleDataset(Dataset):
         """__len__ [summary]
         [extended_summary]
         """
-        return self.labels.shape[0] 
+        return len(self.labels)
 
     def __getitem__(self, index):
         """__getitem__ [summary]

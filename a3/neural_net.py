@@ -77,12 +77,12 @@ class SimpleConvNetModel(nn.Module):
 if __name__ == "__main__":
     neural_net = SimpleNeuralNetModel([400,200,10])
     print(neural_net.linears)
-    train_load, val_load, test_load = get_data_loaders('train/train_samples.pkl',
-                                                       'train/correct_train_labels.pkl',
-                                                       'val/val_samples.pkl',
-                                                       'val/correct_val_labels.pkl',
-                                                       'test/test_samples.pkl',
-                                                       'test/correct_test_labels.pkl')
+    train_load, val_load, test_load = get_data_loaders('C:\\Users\\evely\\IntSys-Education\\a3\\data\\train\\train_samples.pkl',
+                                                       'C:\\Users\\evely\\IntSys-Education\\a3\\data\\train\\correct_train_labels.pkl',
+                                                       'C:\\Users\\evely\\IntSys-Education\\a3\\data\\val\\val_samples.pkl',
+                                                       'C:\\Users\\evely\\IntSys-Education\\a3\\data\\val\\correct_val_labels.pkl',
+                                                       'C:\\Users\\evely\\IntSys-Education\\a3\\data\\test\\test_samples.pkl',
+                                                       'C:\\Users\\evely\\IntSys-Education\\a3\\data\\test\\correct_test_labels.pkl')
 
     model = SimpleNeuralNetModel(layer_sizes=[784, 200, 200, 10])
     optimizer = optim.Adam(params=model.parameters(), lr = 0.01)

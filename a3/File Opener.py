@@ -10,7 +10,11 @@ label_data = pickle.load(ct_pkl_file)
 ts_pkl_file = open('C:\\Users\\evely\\IntSys-Education\\a3\\data\\train\\train_samples.pkl', 'rb')
 samples = pickle.load(ts_pkl_file)
 
-print(len(list(samples[0].crop().getdata())))
+samples[0].show()
+s1 = samples[0].crop((0, 0, 28, 28)).show()
+s2 = samples[0].crop((28, 0, 56, 28)).show()
+s3 = samples[0].crop((0, 28, 28, 56)).show()
+s4 = samples[0].crop((28, 28, 56, 56)).show()
 
 """missing_labels = []
 
