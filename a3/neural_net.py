@@ -27,6 +27,14 @@ class SimpleNeuralNetModel(nn.Module):
         for i in range (0, length -1): 
             self.linears.append(nn.Linear(layer_sizes[i], layer_sizes[i+1]))
     
+    """
+    nn.Sequential 
+    10,2 
+    * unravel lists
+    setattr directly access 
+    getattr 
+    define a configuration 
+    """
     def forward(self, x):
         """forward generates the prediction for the input x.
         :param x: Input array of size (Batch,Input_layer_size)
@@ -41,6 +49,7 @@ class SimpleNeuralNetModel(nn.Module):
             x = nn.ReLU(x * l)
         x = self.softmax(x * self.linears[n])
         return np.to_array(x)
+
 
 
 class SimpleConvNetModel(nn.Module):
